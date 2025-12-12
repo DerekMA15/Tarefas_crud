@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    /* Módulos */
+    "target": "es2020", 
+    "module": "commonjs", 
+    "rootDir": "./src", 
+    "outDir": "./dist", 
+    
+    /* Strictness e OO */
+    "strict": true, // Habilita todas as checagens estritas de tipagem (Recomendado para OO)
+    "esModuleInterop": true, 
+    "skipLibCheck": true, 
+    "forceConsistentCasingInFileNames": true, 
+    
+    /* Configurações de Código */
+    "resolveJsonModule": true, // Permite importar arquivos .json
+    "sourceMap": true // Gera arquivos de mapa para debug
+  },
+  "include": ["src/**/*"], // Inclui todos os arquivos na pasta src
+  "exclude": ["node_modules"]
+}
