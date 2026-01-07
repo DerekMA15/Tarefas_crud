@@ -43,3 +43,6 @@ O trabalho de um programador backend, especialmente no desenvolvimento de APIs (
         Erros Padronizados (Nível 3): Fazer o serviço se comunicar bem com outros serviços ou com o frontend, informando claramente onde a falha ocorreu.
 
         Testes (Nível 3): Assegurar que o que funciona hoje continuará funcionando amanhã.
+
+
+        para dar run no postgresql : sudo systemctl start postgresql
