@@ -6,6 +6,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000; // definir a porta de leitura de valores como a rota 3000;
 
+app.use(express.json())
 app.use('/tarefas', router)
 
 app.post('/tarefas', router);
