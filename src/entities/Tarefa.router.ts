@@ -92,7 +92,7 @@ router.delete('/:id', async  (req: Request, res: Response) => {
 
     // caso não encontre o id
     catch(error:any){
-        console.log("--- ERRO NO POST ---");
+        console.log("--- ERRO NO DELETE ---");
         console.log("Mensagem:", error.message);
         console.log("Código:", error.code);
         console.log("--------------------");
@@ -100,47 +100,43 @@ router.delete('/:id', async  (req: Request, res: Response) => {
     }
 })
 
-// // PUT =======================================
-// router.put('/:id',  (req: Request, res: Response) => {
-//     const idParaEditar = parseInt(req.params.id);
-//     const { titulo } = req.body;
-//     const concluida = req.body; 
+// PUT =======================================
+router.put('/:id',  async (req: Request, res: Response) => {
+    const IDParaEditar:number = parseInt(req.params.id);
+    // mantém. 
+    const  {titulo, concluida} = req.body;
 
-//     console.log(`Tentando editar a tarefa ${idParaEditar} para o novo título: ${titulo}`);
-//     console.log("ID que chegou na URL:", req.params.id);
+    console.log(`Tentando editar a tarefa ${IDParaEditar} para o novo título: ${titulo}`);
+    console.log("ID que chegou na URL:", req.params.id);
 
-//     if (isNaN(idParaEditar)) {
-//         return res.status(400).json({ error: "ID inválido. Use um número na URL." });
-//     }
-//    const indiceTarefa =  tarefas.findIndex(t => t.id === idParaEditar)
-  
+    // vallidação do ID de entrada 
+     
+    if (isNaN(IDParaEditar)) {
+        return res.status(400).json({ error: "ID inválido. Use um número na URL." });
+    }
+    // Validação título
+    if (!titulo || titulo.trim().length === 0) {
+            return res.status(400).json({ error: "O novo título deve ser preenchido." });
+    }
+    // pega o tamanho do array para garantir que o id está entre eles, caso o id pedido para edição seja maior que os valores da coluna.
+    try {
+        //update
+        const updateByID = 'UPDATE tarefas SET titulo = $1, concluida = $2 WHERE id = $3 RETURNING *';
+        const result = await pool.query(updateByID,[titulo,concluida, IDParaEditar]);    
+        if(result.rowCount === 0){
+            return res.status(404).json({ error: `Tarefa com ID ${IDParaEditar} não encontrada.` });
+        }
+        
+        return res.status(200).json({correct: `Id ${IDParaEditar} locallizado e modificado com sucesso.`})
+    }
+    catch(error:any){
+        
+        console.log("--- ERRO NO POST ---");
+        console.log("Mensagem:", error.message);
+        console.log("Código:", error.code);
+        console.log("--------------------");
 
-//     // caso não encontre o id
-//     if ( indiceTarefa === -1){
-//         return res.status(404).json({ error: `Tarefa com ID ${idParaEditar} não encontrada.` });
-//     }
-//     // Validação título
-//     if (!titulo || titulo.trim().length === 0) {
-//         return res.status(400).json({ error: "O novo título deve ser preenchido." });
-//     }
-
-// // validação do que foi alterado, caso seja undefined, apenas manter os antigos. 
-//     const task = tarefas[indiceTarefa];
-
-//     if(titulo !== undefined){
-//         task.titulo = titulo.trim();
-//     }
-//     else{
-//         task.titulo = tarefas[indiceTarefa].titulo;
-//     }
-
-//     if(concluida !== undefined){
-//         task.concluida = concluida;
-//     }
-//     else{
-//         task.concluida = tarefas[indiceTarefa].concluida;
-//     }
-//     return res.status(200).json({correct: `Id ${idParaEditar} locallizado e excluido com Sucesso.`})
-// })
+     }
+})
 
 export default router; // para importar é: import router from "./..", pois definimos esse modulo como router 
